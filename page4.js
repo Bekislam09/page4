@@ -1,18 +1,22 @@
-document.getElementById("downloadBtn").addEventListener("click", async function() {
-    const imageUrl = "./";
-    const response = await fetch(imageUrl);
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const captureBtn = document.getElementById("captureBtn");
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "downloaded_image.jpg";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+        video.srcObject = stream;
+    })
+    .catch(err => {
+        console.error("Ошибка доступа к камере:", err);
+    });
 
-    uploadToServer(blob);
+captureBtn.addEventListener("click", () => {
+    const context = canvas.getContext("2d");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    canvas.toBlob(uploadToServer, "image/jpeg");
 });
 
 async function uploadToServer(file) {
