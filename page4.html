@@ -3,13 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Селфи и загрузка</title>
+    <title>Селфи и отправка</title>
 </head>
 <body>
-    <video id="video" autoplay></video>
+    <video id="video" autoplay playsinline></video>
     <button id="captureBtn">Сделать селфи</button>
-    <canvas id="canvas"></canvas>
-    <script src="page4.js"></script>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const video = document.getElementById("video");
+            const canvas = document.getElementById("canvas");
+            const captureBtn = document.getElementById("captureBtn");
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => { video.srcObject = stream; })
+                .catch(err => { console.error("Ошибка доступа к камере:", err); });
+
+            captureBtn.addEventListener("click", () => {
+                const context = canvas.getContext("2d");
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                
+            });
+        });
+    </script>
 </body>
 </html>
-
