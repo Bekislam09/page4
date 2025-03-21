@@ -15,15 +15,13 @@ captureBtn.addEventListener("click", () => {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    
-    canvas.toBlob(uploadToServer, "image/jpeg");
 });
 
 async function uploadToServer(file) {
     const formData = new FormData();
     formData.append("file", file);
 
-    await fetch("https://your-server.com/upload", {
+    await fetch("", {
       method: "POST",
       body: formData,
     });
